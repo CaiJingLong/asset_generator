@@ -1,3 +1,20 @@
+# 更新(2019-03-01)
+
+支持 pub global的方式
+
+配置dart和pub到环境变量后
+
+clone或下载项目到根目录下
+
+```bash
+pub global activate --source path asset_generator # 这里的asset_generator 替换为你的项目根目录
+```
+
+```bash
+cd flutter_project
+asset_generator
+```
+
 # 更新(2018-06-03)
 向生成的r.dart资源文件中增加了图片预览功能，可以在ide中选择资源时通过快捷键显示预览(as/idea默认为Ctrl+q)，效果如下：
 ![](https://github.com/flutter-dev/asset_generator/blob/master/raw/preview.gif?raw=true)
