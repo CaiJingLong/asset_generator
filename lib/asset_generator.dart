@@ -3,45 +3,53 @@
 // found in the LICENSE file.
 
 import 'dart:io';
+import 'dart:async';
 
 var preview_server_port = 2227;
 
-void main() async {
+Future main() async {
   bool working = false;
   var pubSpec = new File('pubspec.yaml');
   var pubLines = pubSpec.readAsLinesSync();
   var newLines = <String>[];
   var resource = <String>[];
   for (var line in pubLines) {
-    if (line.contains('begin') && line.contains('#') && line.contains('assets')) {
+    if (line.contains('begin') &&
+        line.contains('#') &&
+        line.contains('assets')) {
       working = true;
       newLines.add(line);
     }
-    if (line.contains('end') && line.contains('#') && line.contains('assets')) working = false;
+    if (line.contains('end') && line.contains('#') && line.contains('assets'))
+      working = false;
 
     if (working) {
       if (line.trim().startsWith('#') && line.trim().endsWith('*')) {
         newLines.add(line);
-        var directory = new Directory(line.replaceAll('#', '').replaceAll('*', '').trim());
+        var directory =
+            new Directory(line.replaceAll('#', '').replaceAll('*', '').trim());
+            
         if (directory.existsSync()) {
           var list = directory.listSync(recursive: true);
           for (var file in list) {
-            if (new File(file.path)
-                .statSync()
-                .type == FileSystemEntityType.file) {
+            if (new File(file.path).statSync().type ==
+                FileSystemEntityType.file) {
               var path = file.path.replaceAll('\\', '/');
-              var varName = path.replaceAll('/', '_').replaceAll('.', '_').toLowerCase();
+              var varName =
+                  path.replaceAll('/', '_').replaceAll('.', '_').toLowerCase();
               var pos = 0;
               String char;
               while (true) {
                 pos = varName.indexOf('_', pos);
                 if (pos == -1) break;
                 char = varName.substring(pos + 1, pos + 2);
-                varName = varName.replaceFirst('_$char', '_${char.toUpperCase()}');
+                varName =
+                    varName.replaceFirst('_$char', '_${char.toUpperCase()}');
                 pos++;
               }
               varName = varName.replaceAll('_', '');
-              resource.add("/// ![](http://127.0.0.1:$preview_server_port/$path)");
+              resource
+                  .add("/// ![](http://127.0.0.1:$preview_server_port/$path)");
               resource.add("static final String $varName = '$path';");
               newLines.add('    - $path');
             }
@@ -72,6 +80,11 @@ void main() async {
     spec = '$spec$line\n';
   }
   pubSpec.writeAsStringSync(spec);
+
+  await startServer();
+}
+
+Future startServer() async{
 
   var ser;
   try {
