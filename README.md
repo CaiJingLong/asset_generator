@@ -1,6 +1,6 @@
 # 更新(2019-03-01)
 
-支持 pub global的方式
+支持[pub global](https://www.dartlang.org/tools/pub/cmd/pub-global)的方式来使用项目
 
 配置dart和pub到环境变量后
 
@@ -14,6 +14,8 @@ pub global activate --source path asset_generator # 这里的asset_generator 替
 cd flutter_project
 asset_generator
 ```
+
+旧的使用方式只需要
 
 # 更新(2018-06-03)
 向生成的r.dart资源文件中增加了图片预览功能，可以在ide中选择资源时通过快捷键显示预览(as/idea默认为Ctrl+q)，效果如下：
