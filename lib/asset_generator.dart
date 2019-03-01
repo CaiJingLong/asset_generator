@@ -3,10 +3,11 @@
 // found in the LICENSE file.
 
 import 'dart:io';
+import 'dart:async';
 
 var preview_server_port = 2227;
 
-void main() async {
+Future main() async {
   bool working = false;
   var pubSpec = new File('pubspec.yaml');
   var pubLines = pubSpec.readAsLinesSync();
